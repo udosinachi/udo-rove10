@@ -9,19 +9,22 @@
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="#" method="POST">
+      <form class="space-y-6" method="POST" @submit.prevent="handleLogin">
+        <div v-if="error" class="border bg-red-200 rounded-md p-1.5">
+          <p class="text-sm text-center text-red-600">
+            {{ error }}
+          </p>
+        </div>
         <div>
           <label
             for="email"
             class="block text-sm font-medium leading-6 text-gray-900"
-            >Email address</label
+            >Email Address</label
           >
           <div class="mt-2">
             <input
-              id="email"
-              name="email"
               type="email"
-              autocomplete="email"
+              v-model="emailAddress"
               required
               class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -35,20 +38,20 @@
               class="block text-sm font-medium leading-6 text-gray-900"
               >Password</label
             >
-            <div class="text-sm">
-              <a
-                href="#"
-                class="font-semibold text-indigo-600 hover:text-indigo-500"
-                >Forgot password?</a
-              >
-            </div>
+
+            <button
+              type="button"
+              @click="togglePasswordVisibility"
+              class="text-sm text-blue-500 focus:outline-none"
+            >
+              {{ passwordVisible ? "Hide" : "Show" }}
+            </button>
           </div>
           <div class="mt-2">
             <input
-              id="password"
-              name="password"
-              type="password"
-              autocomplete="current-password"
+              v-model="password"
+              :type="passwordVisible ? 'text' : 'password'"
+              autocomplete="password"
               required
               class="block w-full rounded-md border-0 p-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             />
@@ -60,7 +63,8 @@
             type="submit"
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
-            Login
+            <Loader v-if="loading" />
+            <span v-else>Login</span>
           </button>
         </div>
       </form>
@@ -79,12 +83,33 @@
 </template>
 
 <script lang="ts" setup>
-const user = ref({
-  username: "",
-  password: "",
+definePageMeta({
+  middleware: "un-auth",
 });
+import { useAuth } from "~/composables/useAuth";
 
-const login = async () => {
-  // TODO send user Data to the login endpoint and redirect if  successful
+const { login } = useAuth();
+const router = useRouter();
+
+const emailAddress = ref("");
+const password = ref("");
+const loading = ref(false);
+const error = ref("");
+const passwordVisible = ref(false);
+const togglePasswordVisibility = () => {
+  passwordVisible.value = !passwordVisible.value;
+};
+
+const handleLogin = async () => {
+  error.value = "";
+  loading.value = true;
+  try {
+    await login(emailAddress.value, password.value);
+    router.push("/dashboard");
+  } catch (err: any) {
+    error.value = err.error;
+  } finally {
+    loading.value = false;
+  }
 };
 </script>
