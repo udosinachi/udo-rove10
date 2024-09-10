@@ -53,6 +53,7 @@ export const useLogout = () => {
   const logout = () => {
     const userCookie = useCookie("user");
     userCookie.value = null;
+    localStorage.removeItem("fileSubmitted");
 
     router.push("/");
   };
