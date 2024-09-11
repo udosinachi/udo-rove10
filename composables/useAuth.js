@@ -1,5 +1,3 @@
-// composables/useAuth.js
-
 import { mockRequest } from "~/utilis/mockApi";
 import { useCookie } from "#app";
 
@@ -10,9 +8,7 @@ export const useAuth = () => {
         emailAddress,
         password,
       });
-      console.log(response.data.message);
-
-      // Save user details to cookies
+      // console.log(response.data.message);
       const userCookie = useCookie("user");
       userCookie.value = response.data;
 
@@ -30,12 +26,10 @@ export const useAuth = () => {
         businessName,
         password,
       });
-      console.log(response.data.message);
-
-      // Save user details to cookies
+      // console.log(response.data.message);
       const userCookie = useCookie("user");
       userCookie.value = response.data;
-      console.log(response.data, "dataaaaaaaa");
+      // console.log(response.data, "dataaaaaaaa");
 
       return response.data;
     } catch (error) {

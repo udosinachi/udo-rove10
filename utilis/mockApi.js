@@ -1,5 +1,3 @@
-// utils/mockApi.js
-
 const mockData = {
   users: [
     {
@@ -16,7 +14,7 @@ function mockRequest(endpoint, method, body) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
       try {
-        console.log(mockData);
+        // console.log(mockData);
         if (endpoint === "/api/login" && method === "POST") {
           const user = mockData.users.find(
             (u) =>
@@ -24,7 +22,7 @@ function mockRequest(endpoint, method, body) {
               u.password === body.password
           );
           if (user) {
-            console.log(mockData);
+            // console.log(mockData);
             resolve({
               status: 200,
               data: {
@@ -34,19 +32,19 @@ function mockRequest(endpoint, method, body) {
               },
             });
           } else {
-            console.log(mockData);
+            // console.log(mockData);
             reject({
               status: 401,
               error: "Invalid Email Address or password",
             });
           }
         } else if (endpoint === "/api/signup" && method === "POST") {
-          console.log(mockData);
+          // console.log(mockData);
           const existingUser = mockData.users.find(
             (u) => u.emailAddress === body.emailAddress
           );
           if (existingUser) {
-            console.log(mockData);
+            // console.log(mockData);
             reject({
               status: 409,
               error: "User already exists",
@@ -60,7 +58,7 @@ function mockRequest(endpoint, method, body) {
               token: `newMockToken${Date.now()}`,
             };
             mockData.users.push(newUser);
-            console.log(mockData);
+            // console.log(mockData);
             resolve({
               status: 201,
               data: {
@@ -82,7 +80,7 @@ function mockRequest(endpoint, method, body) {
           error: "Internal server error",
         });
       }
-    }, 1500); // Simulate network delay
+    }, 1500);
   });
 }
 

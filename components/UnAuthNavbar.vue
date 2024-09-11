@@ -1,6 +1,6 @@
 <template>
   <div>
-    <header class="shadow-sm bg-white">
+    <header class="shadow-sm bg-white py-1">
       <nav class="container mx-auto p-4 flex justify-between">
         <NuxtLink to="/" class="font-bold text-lg text-indigo-600"
           >Udo Uploads</NuxtLink
